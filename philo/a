@@ -1,0 +1,104 @@
+#include "philos.h"
+
+static ssize_t filter(char *string)
+{
+  int i;
+  ssize_t res;
+
+  res = 0;
+  i = 0;
+  if(string[i] == '-')
+  {
+    printf("NO NEGATIVE NUMBERS PLEASE!(READ THE SUBJECT)");
+    exit(1);
+  }
+  if(string[i] == '+')
+    i++;
+  while(string[i] >= '0' && string[i] <= '9')
+  {
+    res = res * 10 + (string[i] - '0');
+    i++;
+  }
+    if(string[i] != '\0')
+  {
+    printf("INVALID PARAM\n");
+    exit(1);
+  }
+  return res;
+}
+ssize_t get_ph(char *ph)
+{
+  return filter(ph);
+}
+
+ssize_t get_d(char *die)
+{
+  return filter(die);
+}
+
+ssize_t get_e(char *eat)
+{
+  return filter(eat);
+}
+
+ssize_t get_s(char *sleep)
+{
+  return filter(sleep);
+}
+
+ssize_t get_it(char *it)
+{
+  return filter(it);
+}#include "philos.h"
+
+void message()
+{
+  printf("ATTENTION YOU SHOULD ENTER THIS PARAMS : < number_of_philosophers time_to_die time_to_eat time_to_sleep[number_of_times_each_philosopher_must_eat] >");
+  exit(1);
+}
+
+void hp(t_params *a, int ac, char **av)
+{
+  if (ac != 5 && ac != 6)
+    message();
+  a->num_philo = get_ph(av[1]);
+  a->time_to_die = get_d(av[2]);
+  a->time_to_eat = get_e(av[3]);
+  a->time_to_sleep = get_s(av[4]);
+  if(ac == 6)
+    a->time_each_ph_must_eat = get_it(av[5]);
+}
+int main(int ac , char **av)
+{
+  t_params a;
+  hp(&a , ac , av );
+  printf("SUCCESS :)\n");
+  printf("num of philosophers = %ld\ntime to die = %ld\ntime to eat = %ld\ntime to sleep %ld\ntime fo each philo must eat = %ld",a.num_philo,a.time_to_die , a.time_to_eat ,a.time_to_sleep , a.time_each_ph_must_eat);
+  if(a.num_philo < 0 || a.time_to_die < 0 || a.time_to_eat < 0 || a.time_to_sleep < 0 || (a.time_each_ph_must_eat < 0 && ac == 6))
+  {
+    printf("\nDO NOT TRY TO OVERFLOW THE PROCESS HONEY!");
+    exit(1);
+  }
+  
+}#ifndef PHILO_H
+#define PHILO_H
+#include<stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+struct s_params
+{
+  ssize_t  num_philo;
+  ssize_t time_to_die;
+  ssize_t time_to_eat;
+  ssize_t time_to_sleep;
+  ssize_t time_each_ph_must_eat;
+};
+typedef struct s_params t_params;
+
+ssize_t get_ph(char *ph);
+ssize_t get_d(char *die);
+ssize_t get_e(char *eat);
+ssize_t get_s(char *sleep);
+ssize_t get_it(char *it);
+#endif
