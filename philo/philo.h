@@ -4,6 +4,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include <limits.h>
+
 struct					s_params
 {
 	ssize_t				num_philo;

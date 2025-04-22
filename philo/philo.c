@@ -1,8 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlakhdar <mlakhdar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 21:47:12 by mlakhdar          #+#    #+#             */
+/*   Updated: 2025/04/22 21:48:22 by mlakhdar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	message(void)
 {
-	printf("ATTENTION YOU SHOULD ENTER THIS PARAMS : < number_of_philosophers time_to_die time_to_eat time_to_sleep[number_of_times_each_philosopher_must_eat] >");
+	printf("ATTENTION YOU SHOULD ENTER THIS PARAMS : ");
+	printf("< number_of_philosophers ");
+	printf("time_to_die time_to_eat time_to_sleep ");
+	printf("[number_of_times_each_philosopher_must_eat] > ");
 	exit(1);
 }
 
