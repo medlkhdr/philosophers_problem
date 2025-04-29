@@ -1,5 +1,5 @@
 CC=cc 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRCS = philo.c getters.c 
 HEADER = philo.h 

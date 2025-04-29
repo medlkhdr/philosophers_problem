@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-
-ssize_t	filter(char *string)
+#define LIMIT 4294967295
+unsigned long	filter(char *string)
 {
 	int		i;
-	ssize_t	res;
+	unsigned long	res;
 
 	res = 0;
 	i = 0;
@@ -29,7 +29,7 @@ ssize_t	filter(char *string)
 		i++;
 	while (string[i] >= '0' && string[i] <= '9')
 	{
-		if (res > 4294967295)
+		if (res > LIMIT)
 		{
 			printf("overflow !!! \n");
 			exit(1);
