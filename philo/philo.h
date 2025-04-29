@@ -22,6 +22,7 @@ typedef struct s_philo
 	t_params arg;
 	int index;
 	pthread_t threadt ;
+	pthread_mutex_t mutext ;
 }t_philo;
 
 unsigned long filter(char *string);

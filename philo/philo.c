@@ -38,11 +38,14 @@ void *handlep(void *arg)
 {
 	t_philo *p ;
 	p = arg ;
+	pthread_mutex_lock(&p->mutext);
 	printf("the philosopher with his id = %lu with the index %d\n" , p->threadt , p->index);
 	//where the problem have to be solved  solved ;
+	printf("anyway i just got made i'm the thread %lu and i commit suicide bye \n", p->threadt);
+	pthread_mutex_unlock(&p->mutext);
 	return NULL;
 }
-void init_solution(t_params a)
+void init_solution(t_params a, pthread_mutex_t lock)
 {
 	unsigned long i =0;
 	t_philo p[200] ; 
@@ -50,6 +53,7 @@ void init_solution(t_params a)
 	{
 		p[i].arg = a;
 		p[i].index = i;
+		p[i].mutext = lock ;
 		pthread_create(&p[i].threadt , NULL , &handlep , (void *)&p[i]);
 		i++;
 	}
@@ -63,6 +67,10 @@ void init_solution(t_params a)
 int	main(int ac, char **av)
 {
 	t_params a;
+	static pthread_mutex_t lock;
+	pthread_mutex_init(&lock , NULL);
+
 	hp(&a, ac, av);
-	init_solution( a);
+	init_solution( a , lock);
+	pthread_mutex_destroy(&lock);
 }
