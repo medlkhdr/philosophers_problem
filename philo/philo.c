@@ -36,16 +36,14 @@ void	hp(t_params *a, int ac, char **av)
 }
 void *handlep(void *arg)
 {
-	t_philo *p ;
-	p = arg ;
-	pthread_mutex_lock(&p->mutext);
-	printf("the philosopher with his id = %lu with the index %d\n" , p->threadt , p->index);
-	//where the problem have to be solved  solved ;
-	printf("anyway i just got made i'm the thread %lu and i commit suicide bye \n", p->threadt);
-	pthread_mutex_unlock(&p->mutext);
+	t_philo *p;
+	p = arg;
+	printf("Philosopher ID: %lu, Index: %d\n", p->threadt, p->index);
+	printf("Hello! I am philosopher %d, and I am starting my routine.\n", p->index);
+	printf("I have completed my task and will now terminate. Goodbye from thread %lu.\n", p->threadt);
 	return NULL;
 }
-void init_solution(t_params a, pthread_mutex_t lock)
+void init_solution( t_params a )
 {
 	unsigned long i =0;
 	t_philo p[200] ; 
@@ -53,7 +51,7 @@ void init_solution(t_params a, pthread_mutex_t lock)
 	{
 		p[i].arg = a;
 		p[i].index = i;
-		p[i].mutext = lock ;
+		pthread_mutex_init(&p[i].f , NULL);
 		pthread_create(&p[i].threadt , NULL , &handlep , (void *)&p[i]);
 		i++;
 	}
@@ -61,16 +59,14 @@ void init_solution(t_params a, pthread_mutex_t lock)
 	while (i < a.num_philo)
 	{
 		pthread_join(p[i].threadt, NULL);
+		pthread_mutex_destory(&p[i].f);
 		i++;
 	}
 }
 int	main(int ac, char **av)
 {
-	t_params a;
-	static pthread_mutex_t lock;
-	pthread_mutex_init(&lock , NULL);
 
+	t_params a;
 	hp(&a, ac, av);
-	init_solution( a , lock);
-	pthread_mutex_destroy(&lock);
+	init_solution( a );
 }
