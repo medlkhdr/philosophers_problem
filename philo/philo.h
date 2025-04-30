@@ -16,15 +16,14 @@ typedef struct s_params
 	unsigned long time_each_ph_must_eat;
 } t_params;
 
-
 typedef struct s_philo
 {
 	t_params arg;
 	int index;
-	pthread_t threadt ;
-	pthread_mutex_t f ;
-
-}t_philo;
+	pthread_t threadt;
+	pthread_mutex_t *left_fork;
+	pthread_mutex_t *right_fork;
+} t_philo;
 
 unsigned long filter(char *string);
 
