@@ -6,7 +6,14 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+#include <stdbool.h>
+#include <string.h>
 
+#define EAT "is eating"
+#define DONE "is done eating"
+#define THINK "is thinking"
+#define FORK "has taken a fork"
+#define SLEEP "is sleeping"
 typedef struct s_params
 {
 	unsigned long num_philo;
@@ -21,6 +28,7 @@ typedef struct s_philo
 	t_params arg;
 	int index;
 	pthread_t threadt;
+	bool dead;
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
 } t_philo;
