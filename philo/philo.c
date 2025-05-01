@@ -50,6 +50,12 @@ void	philo_eat(t_philo *p)
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
 }
+unsigned long get_time_now_ms()
+{
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+}
 
 void	philo_think(t_philo *p)
 {
@@ -63,7 +69,19 @@ void	philo_sleep(t_philo *p)
 }
 void philo_die(t_philo *p)
 {
-	
+    unsigned long now = get_time_now_ms();
+    if (now - p->last_meal > p->arg.time_to_die && !p->dead)
+    {
+        p->dead = true;
+        print_status(p->index, DEAD);
+    }
+}
+
+void getime(t_philo *p)
+{
+	pthread_mutex_lock(p->meal_mutex);
+	p->last_meal = get_time_now_ms();
+	pthread_mutex_unlock(p->meal_mutex);
 }
 void	*handlep(void *arg)
 {
@@ -71,9 +89,11 @@ void	*handlep(void *arg)
 	unsigned long counted;
 	counted = 0;
 	p = arg;
-	p->dead = 1 ;
-	while ((p->arg.time_each_ph_must_eat == -1 || counted < p->arg.time_each_ph_must_eat) && (!p->dead))
+	p->dead = false ;
+	while ((p->arg.time_each_ph_must_eat == -1 ||
+		 counted < p->arg.time_each_ph_must_eat) && (!p->dead))
 	{
+		getime(p);
 		philo_eat(p);
 		philo_sleep(p);
 		philo_think(p);
@@ -88,13 +108,20 @@ void	init_solution(t_params a)
 {
 	t_philo *p;
 	pthread_mutex_t *forks;
+	pthread_mutex_t *meals ; 
 
 	unsigned long i = 0;
+	meals = malloc(sizeof(pthread_mutex_t) * a.num_philo);
 	p = malloc(sizeof(t_philo) * a.num_philo);
 	forks = malloc(sizeof(pthread_mutex_t) * a.num_philo);
 	while (i < a.num_philo)
 		pthread_mutex_init(&forks[i++], NULL);
-
+	i = 0;
+	while(i < a.num_philo)
+		pthread_mutex_init(&meals[i++], NULL);
+	i = 0;
+	while(i < a.num_philo)
+		p[i].meal_mutex = &meals[i] , i++;
 	i = 0;
 	while (i < a.num_philo)
 	{
@@ -113,6 +140,9 @@ void	init_solution(t_params a)
 	i = 0;
 	while (i < a.num_philo)
 		pthread_mutex_destroy(&forks[i++]);
+	i = 0;
+	while(i < a.num_philo)
+		pthread_mutex_destroy(&meals[i++]);
 }
 
 int	main(int ac, char **av)

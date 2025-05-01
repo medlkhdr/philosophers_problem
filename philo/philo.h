@@ -8,12 +8,13 @@
 # include <limits.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include <sys/time.h>
 #define EAT "is eating"
 #define DONE "is done eating"
 #define THINK "is thinking"
 #define FORK "has taken a fork"
 #define SLEEP "is sleeping"
+#define DEAD "died :("
 typedef struct s_params
 {
 	unsigned long num_philo;
@@ -29,6 +30,8 @@ typedef struct s_philo
 	int index;
 	pthread_t threadt;
 	bool dead;
+	pthread_mutex_t *meal_mutex ;
+	unsigned long last_meal; 
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
 } t_philo;
